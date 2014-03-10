@@ -4,7 +4,11 @@
 	<meta charset="UTF-8">
 	<title>生日快乐！</title>
 	<link href="./h5_files/css" rel="stylesheet" type="text/css" data-inprogress="">
-	<link href="./h5_files/css(1)" rel="stylesheet" type="text/css" data-inprogress="">
+	<link href="css/default.css" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/garden.js"></script>
+    <script type="text/javascript" src="js/functions.js"></script>
+
 	<style media="" data-href="css/csshake.css">/* line 20, ../sass/_shake.scss */
 .shake {
   display: inline-block;
@@ -3175,34 +3179,18 @@ pre[data-line] {
 		<section class="section pear" data-index="3" style="position: absolute; top: 200%;">
 			<h1>KIND HEARTED</h1>
 			<h4>她的内心和她的美貌一样纯真美丽</h4>
-			<ul class="previews bigs">
-				<li>
-					<i class="preview-item big shake shake-hard freez" id="pr1">
-						❄
-						<span class="flip"></span>
-					</i>
-					<p class="preview-desc">Freezed after Shake</p>
-				</li>
-				<li>
-					<i class="preview-item big shake shake-hard shake-constant hover-stop" id="pr2">
-					
-						<span class="flip"></span>
-					</i>
-					<p class="preview-desc">Constant, :hover stops</p>
-				</li>
-			</ul>
-			<div class="dropdown">
-				<select class="dropdown-select" id="shake-type">
-				    <option value="" disabled="" selected="">Select a shake</option>
-				    <option value="shake-hard">Hard Shake</option>
-				    <option value="shake-slow">Slow Shake</option>
-				    <option value="shake-little">Little Shake</option>
-				    <option value="shake-horizontal">Horizontal Shake</option>
-				    <option value="shake-vertical">Vertical Shake</option>
-				    <option value="shake-rotate">Rotate Shake</option>
-				    <option value="shake-opacity">Opacity Shake</option>
-				    <option value="shake-crazy">Crazy Shake</option>
-				</select>
+			  <div id="loveHeart">
+				<canvas id="garden"></canvas>
+				<div id="words">
+				  <div id="messages">
+					my Goddesses, I have been following  with you for
+					<div id="elapseClock"></div>
+				  </div>
+				  <div id="loveu">
+					 forever and ever.<br/>
+					<div class="signature">- kai</div>
+				  </div>
+				</div>
 			</div>
 			<a class="arrow shake shake-constant"></a>
 		</section>
@@ -3253,10 +3241,9 @@ pre[data-line] {
 			<h1>SUNSHINE</h1>
 			<h4>如果没有你，生命将如何平淡与晦涩</h4>
 			<p>I had to make a shake animation for a big project. I did it in vanilla CSS at the begining.<br>After I finished it I discovered <a class="shake shake-constant shake-little" href="http://jackrugile.com/jrumble/">this</a> cool jQuery plugin by <a class="shake" href="https://twitter.com/jackrugile">@jackrugile</a>.<br> Then I started to think I should make <span class="shake shake-little shake-constant">this little CSS project</span>.</p>
-			<a class="btn carrot shake shake-constant hover-stop" href="http://elrumordelaluz.github.io/csshake/css/csshake.min.css">Download</a>
 			<small>csshake.min.css</small>
-			<a class="btn light shake" href="http://github.com/elrumordelaluz">Fork me on Github</a>
-			<footer>Made with ♥ by <a class="shake shake-constant hover-stop" href="http://twitter.com/elrumordelaluz">@elrumordelaluz</a>, using <a href="http://sass-lang.com/">Sass</a>.<br>In this site I used <a href="http://leaverou.github.io/prefixfree/">prefixfree</a> and <a href="http://prismjs.com/">Prism.js</a> both by <a href="http://twitter.com/LeaVerou">Lea Verou</a> and <a href="https://github.com/peachananr/onepage-scroll">One page scroll</a> plugin by <a href="https://twitter.com/peachananr">@peachananr</a> </footer>
+
+			<footer></footer>
 		</section>
 	</div>
 
@@ -3294,5 +3281,43 @@ pre[data-line] {
 		
 	</script>
 
+	<script type="text/javascript">
+		var offsetX = $("#loveHeart").width() / 2;
+		var offsetY = $("#loveHeart").height() / 2 - 55;
+		var together = new Date();
+		together.setFullYear(2009, 4, 2);
+		together.setHours(20);
+		together.setMinutes(0);
+		together.setSeconds(0);
+		together.setMilliseconds(0);
+		
+		if (!document.createElement('canvas').getContext) {
+			var msg = document.createElement("div");
+			msg.id = "errorMsg";
+			msg.innerHTML = "Your browser doesn't support HTML5!<br/>Recommend use Chrome 14+/IE 9+/Firefox 7+/Safari 4+"; 
+			document.body.appendChild(msg);
+			$("#code").css("display", "none")
+			$("#copyright").css("position", "absolute");
+			$("#copyright").css("bottom", "10px");
+		    document.execCommand("stop");
+		} else {
+			setTimeout(function () {
+				startHeartAnimation();
+			}, 5000);
+
+			timeElapse(together);
+			setInterval(function () {
+				timeElapse(together);
+			}, 500);
+
+			adjustCodePosition();
+			$("#code").typewriter();
+		}
+	</script>
+
+<script type="text/javascript">
+function Vector(a,b){this.x=a;this.y=b}Vector.prototype={rotate:function(b){var a=this.x;var c=this.y;this.x=Math.cos(b)*a-Math.sin(b)*c;this.y=Math.sin(b)*a+Math.cos(b)*c;return this},mult:function(a){this.x*=a;this.y*=a;return this},clone:function(){return new Vector(this.x,this.y)},length:function(){return Math.sqrt(this.x*this.x+this.y*this.y)},subtract:function(a){this.x-=a.x;this.y-=a.y;return this},set:function(a,b){this.x=a;this.y=b;return this}};function Petal(a,f,b,e,c,d){this.stretchA=a;this.stretchB=f;this.startAngle=b;this.angle=e;this.bloom=d;this.growFactor=c;this.r=1;this.isfinished=false}Petal.prototype={draw:function(){var a=this.bloom.garden.ctx;var e,d,c,b;e=new Vector(0,this.r).rotate(Garden.degrad(this.startAngle));d=e.clone().rotate(Garden.degrad(this.angle));c=e.clone().mult(this.stretchA);b=d.clone().mult(this.stretchB);a.strokeStyle=this.bloom.c;a.beginPath();a.moveTo(e.x,e.y);a.bezierCurveTo(c.x,c.y,b.x,b.y,d.x,d.y);a.stroke()},render:function(){if(this.r<=this.bloom.r){this.r+=this.growFactor;this.draw()}else{this.isfinished=true}}};function Bloom(e,d,f,a,b){this.p=e;this.r=d;this.c=f;this.pc=a;this.petals=[];this.garden=b;this.init();this.garden.addBloom(this)}Bloom.prototype={draw:function(){var c,b=true;this.garden.ctx.save();this.garden.ctx.translate(this.p.x,this.p.y);for(var a=0;a<this.petals.length;a++){c=this.petals[a];c.render();b*=c.isfinished}this.garden.ctx.restore();if(b==true){this.garden.removeBloom(this)}},init:function(){var c=360/this.pc;var b=Garden.randomInt(0,90);for(var a=0;a<this.pc;a++){this.petals.push(new Petal(Garden.random(Garden.options.petalStretch.min,Garden.options.petalStretch.max),Garden.random(Garden.options.petalStretch.min,Garden.options.petalStretch.max),b+a*c,c,Garden.random(Garden.options.growFactor.min,Garden.options.growFactor.max),this))}}};function Garden(a,b){this.blooms=[];this.element=b;this.ctx=a}Garden.prototype={render:function(){for(var a=0;a<this.blooms.length;a++){this.blooms[a].draw()}},addBloom:function(a){this.blooms.push(a)},removeBloom:function(a){var d;for(var c=0;c<this.blooms.length;c++){d=this.blooms[c];if(d===a){this.blooms.splice(c,1);return this}}},createRandomBloom:function(a,b){this.createBloom(a,b,Garden.randomInt(Garden.options.bloomRadius.min,Garden.options.bloomRadius.max),Garden.randomrgba(Garden.options.color.rmin,Garden.options.color.rmax,Garden.options.color.gmin,Garden.options.color.gmax,Garden.options.color.bmin,Garden.options.color.bmax,Garden.options.color.opacity),Garden.randomInt(Garden.options.petalCount.min,Garden.options.petalCount.max))},createBloom:function(a,f,d,e,b){new Bloom(new Vector(a,f),d,e,b,this)},clear:function(){this.blooms=[];this.ctx.clearRect(0,0,this.element.width,this.element.height)}};Garden.options={petalCount:{min:8,max:15},petalStretch:{min:0.1,max:3},growFactor:{min:0.1,max:1},bloomRadius:{min:8,max:10},density:10,growSpeed:1000/60,color:{rmin:128,rmax:255,gmin:0,gmax:128,bmin:0,bmax:128,opacity:0.1},tanAngle:60};Garden.random=function(b,a){return Math.random()*(a-b)+b};Garden.randomInt=function(b,a){return Math.floor(Math.random()*(a-b+1))+b};Garden.circle=2*Math.PI;Garden.degrad=function(a){return Garden.circle/360*a};Garden.raddeg=function(a){return a/Garden.circle*360};Garden.rgba=function(f,e,c,d){return"rgba("+f+","+e+","+c+","+d+")"};Garden.randomrgba=function(i,n,h,m,l,d,k){var c=Math.round(Garden.random(i,n));var f=Math.round(Garden.random(h,m));var j=Math.round(Garden.random(l,d));var e=5;if(Math.abs(c-f)<=e&&Math.abs(f-j)<=e&&Math.abs(j-c)<=e){return Garden.rgba(i,n,h,m,l,d,k)}else{return Garden.rgba(c,f,j,k)}};
+</script>
+	
 
 </body></html>
